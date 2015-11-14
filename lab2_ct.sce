@@ -29,19 +29,19 @@ function Z=f#2_11(U, I)
 endfunction
 
 function R=f#2_12(Z, phi)
-  R = Z * cos( phi );
+  R = Z * cos( abs( phi ) );
 endfunction
 
 function X=f#2_13(Z, phi)
-  X = Z * sin( phi );
+  X = Z * sin( abs( phi ) );
 endfunction
 
 function g=f#2_14(Y, phi)
-  g = Y * cos( phi );
+  g = Y * cos( abs( phi ) );
 endfunction
 
 function b=f#2_15(Y, phi)
-  b = Y * sin( phi );
+  b = Y * sin( abs( phi ) );
 endfunction
 
 function Z=f#2_16(R, R_L, omega, L)
@@ -102,14 +102,18 @@ omega = getOmega( f );
 // Данные варианта:
 mprintf( "Введите свои изначения R, L, R_L и C из таблицы 2.1 в заданных единицах.\n" );
 mprintf( "Пример ввода для 1-го варианта: [100,50,31.7,2]\n" );
-table#2_1( 1, 1:4 ) = input( "Введите значения: " );//[100,50,31.7,2]
+//table#2_1( 1, 1:4 ) = input( "Введите значения: " );
+table#2_1( 1, 1:4 ) = [100,50,31.7,2]
 mprintf( "Формат ввода для таблиц ниже: в квадратных скобках, столбцы - через запятую, строки - через точку с запятой\n" )
 mprintf( "Пример: [1, 2; 3, 4] \n" )
 
 // Результаты измерений:
-table#2_2( 1:3, 1:2 ) = input( "Заполните значения U и φ из таблицы 2.2 для трёх строк: " );//[2, 0; 3.8, -90; 2.56, 80]
-table#2_3( 1:2, 1:2 ) = input( "Заполните значения U и φ из таблицы 2.3 для двух строк: " );//[3.61, 46; 4.3, -60]
-table#2_4( 1:2, 1:2 ) = input( "Заполните значения U и φ из таблицы 2.4 для двух строк: " );//[1.451, 36; 1.805, -27]
+//table#2_2( 1:3, 1:2 ) = input( "Заполните значения U и φ из таблицы 2.2 для трёх строк: " );
+table#2_2( 1:3, 1:2 ) = [2, 0; 3.8, -90; 2.56, 80];
+//table#2_3( 1:2, 1:2 ) = input( "Заполните значения U и φ из таблицы 2.3 для двух строк: " );
+table#2_3( 1:2, 1:2 ) = [3.61, 46; 4.3, -60]
+//table#2_4( 1:2, 1:2 ) = input( "Заполните значения U и φ из таблицы 2.4 для двух строк: " );
+table#2_4( 1:2, 1:2 ) = [1.451, 36; 1.805, -27]
 
 // Приведение данных к единицам СИ:
 table#2_1( 1, 2 ) = table#2_1( 1, 2 ) * 10^-3;
@@ -142,10 +146,10 @@ clear Gres;
 phi = deg2rad( table#2_2( 2, 2 ) );
 
 table#2_5( 2,  1 ) = f#2_11( table#2_2( 2, 1 ), I );
-table#2_5( 2,  3 ) = f#2_13( table#2_5( 2, 1 ), phi )
+table#2_5( 2,  3 ) = f#2_13( table#2_5( 2, 1 ), abs( phi ) )
 table#2_5( 2,  4 ) = f#2_7 ( table#2_5( 2, 3 ) );
 table#2_5( 2,  5 ) = 1 / table#2_5( 2, 1 );
-table#2_5( 2,  7 ) = f#2_15( table#2_5( 2, 5 ), phi );
+table#2_5( 2,  7 ) = f#2_15( table#2_5( 2, 5 ), abs( phi ) );
 table#2_5( 2,  8 ) = 1 / table#2_5( 2, 4 );
 table#2_5( 2, 10 ) = 1 / (omega * table#2_5( 2, 3 ));
 
@@ -155,12 +159,12 @@ clear phi;
 phi = deg2rad( table#2_2( 3, 2 ) );
 
 table#2_5( 3, 1 ) = f#2_11( table#2_2( 3, 1 ), I );
-table#2_5( 3, 2 ) = f#2_12( table#2_5( 3, 1 ), phi );
-table#2_5( 3, 3 ) = f#2_13( table#2_5( 3, 1 ), phi );
+table#2_5( 3, 2 ) = f#2_12( table#2_5( 3, 1 ), abs( phi ) );
+table#2_5( 3, 3 ) = f#2_13( table#2_5( 3, 1 ), abs( phi ) );
 table#2_5( 3, 4 ) = f#2_5 ( table#2_5( 3, 2 ), table#2_5( 3, 3 ) );
 table#2_5( 3, 5 ) = 1 / table#2_5( 3, 1 );
-table#2_5( 3, 6 ) = f#2_14( table#2_5( 3, 5 ), phi );
-table#2_5( 3, 7 ) = f#2_15( table#2_5( 3, 5 ), phi );
+table#2_5( 3, 6 ) = f#2_14( table#2_5( 3, 5 ), abs( phi ) );
+table#2_5( 3, 7 ) = f#2_15( table#2_5( 3, 5 ), abs( phi ) );
 table#2_5( 3, 8 ) = 1 / table#2_5( 3, 4 );
 table#2_5( 3, 9 ) = table#2_5( 3, 3 ) / omega;
 
@@ -197,8 +201,8 @@ table#2_6( 1:2, 1:6 ) = 0;
 phi = deg2rad( table#2_3( 1, 2 ) );
 
 table#2_6( 1, 1 ) = f#2_11( table#2_3( 1, 1 ), I   );
-table#2_6( 1, 2 ) = f#2_12( table#2_6( 1, 1 ), phi );
-table#2_6( 1, 3 ) = f#2_13( table#2_6( 1, 1 ), phi );
+table#2_6( 1, 2 ) = f#2_12( table#2_6( 1, 1 ), abs( phi ) );
+table#2_6( 1, 3 ) = f#2_13( table#2_6( 1, 1 ), abs( phi ) );
 table#2_6( 1, 4 ) = f#2_18( table#2_1( 1, 1 ), table#2_1( 1, 3 ), omega, table#2_1( 1, 2 ) );
 table#2_6( 1, 5 ) = table#2_6( 1, 3 ) / omega;
 
@@ -208,8 +212,8 @@ clear phi;
 phi = deg2rad( table#2_3( 2, 2 ) );
 
 table#2_6( 2, 1 ) = f#2_11( table#2_3( 2, 1 ), I   );
-table#2_6( 2, 2 ) = f#2_12( table#2_6( 2, 1 ), phi );
-table#2_6( 2, 3 ) = f#2_13( table#2_6( 2, 1 ), phi );
+table#2_6( 2, 2 ) = f#2_12( table#2_6( 2, 1 ), abs( phi ) );
+table#2_6( 2, 3 ) = f#2_13( table#2_6( 2, 1 ), abs( phi ) );
 table#2_6( 2, 4 ) = f#2_20( table#2_1( 1, 1 ), table#2_5( 2, 3 ) );
 table#2_6( 2, 6 ) = 1 / ( omega * table#2_6( 2, 3 )) ;
 
@@ -240,8 +244,8 @@ table#2_7( 1:2, 1:6 ) = 0;
 phi = deg2rad( table#2_4( 1, 2 ) );
 
 table#2_7( 1, 1 ) = 1 / f#2_11( table#2_4( 1, 1 ), I   );
-table#2_7( 1, 2 ) = f#2_14( table#2_7( 1, 1 ), phi );
-table#2_7( 1, 3 ) = f#2_15( table#2_7( 1, 1 ), phi );
+table#2_7( 1, 2 ) = f#2_14( table#2_7( 1, 1 ), abs( phi ) );
+table#2_7( 1, 3 ) = f#2_15( table#2_7( 1, 1 ), abs( phi ) );
 table#2_7( 1, 4 ) = f#2_26( table#2_5( 1, 6 ), table#2_5( 3, 6 ), table#2_5( 3, 7 ) );
 table#2_7( 1, 5 ) = 1 / ( omega * table#2_7( 1, 3 ) );
 
@@ -251,8 +255,8 @@ clear phi;
 phi = deg2rad( table#2_4( 2, 2 ) );
 
 table#2_7( 2, 1 ) = 1 / f#2_11( table#2_4( 2, 1 ), I   );
-table#2_7( 2, 2 ) = f#2_14( table#2_7( 2, 1 ), phi );
-table#2_7( 2, 3 ) = f#2_15( table#2_7( 2, 1 ), phi );
+table#2_7( 2, 2 ) = f#2_14( table#2_7( 2, 1 ), abs( phi ) );
+table#2_7( 2, 3 ) = f#2_15( table#2_7( 2, 1 ), abs( phi ) );
 table#2_7( 2, 4 ) = f#2_28( table#2_5( 1, 6 ), table#2_5( 2, 7 ) );
 table#2_7( 2, 6 ) = table#2_7( 2, 3 ) / omega;
 
@@ -298,7 +302,7 @@ table#2_8( 2, 1 ) = R;
 table#2_8( 2, 2 ) = 1 / ( omega * C );
 table#2_8( 2, 3 ) = f#2_17( R, omega, C );
 table#2_8( 2, 4 ) = table#2_8( 2, 3 ) * I;
-table#2_8( 2, 5 ) = rad2deg( f#2_21( omega, C, R ) );
+table#2_8( 2, 5 ) = - rad2deg( f#2_21( omega, C, R ) );
 
 clear L R R_L ;
 
@@ -333,14 +337,14 @@ table#2_9( 1, 1 ) = 1/R + R_L / ( R_L^2 + (omega * L)^2 );
 table#2_9( 1, 2 ) = b_L;
 table#2_9( 1, 3 ) = f#2_24( g_R, g_L, b_L );
 table#2_9( 1, 4 ) = I / table#2_9( 1, 3 );
-table#2_9( 1, 5 ) = rad2deg( f#2_27( b_L, g_R, g_L ) );
+table#2_9( 1, 5 ) = - rad2deg( f#2_27( b_L, g_R, g_L ) );
 
 // Конденсатор:
 table#2_9( 2, 1 ) = g_R;
 table#2_9( 2, 2 ) = b_C;
 table#2_9( 2, 3 ) = f#2_25( g_R, b_C );
 table#2_9( 2, 4 ) = I / table#2_9( 2, 3 );
-table#2_9( 2, 5 ) = rad2deg( f#2_29( b_C, g_R ) );
+table#2_9( 2, 5 ) = - rad2deg( f#2_29( b_C, g_R ) );
 
 clear L C R R_L g_R g_L b_L b_C;
 
